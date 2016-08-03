@@ -21,13 +21,15 @@ data BlogPost' id title body email time = BlogPost
                                             , bpTimestamp  :: time
                                             }
 
-type BlogPostRead = BlogPost' BlogPostID String String Email DateTime
+type BlogPostRead  = BlogPost' BlogPostID String String Email DateTime
 type BlogPostWrite = BlogPost' (Maybe BlogPostID) String String Email (Maybe DateTime)
+
 type BPColumnRead = BlogPost' (Column PGInt8)
                               (Column PGText)
                               (Column PGText)
                               (Column PGText)
                               (Column PGTimestamptz)
+
 type BPColumnWrite = BlogPost' (Maybe (Column PGInt8))
                                (Column PGText)
                                (Column PGText)

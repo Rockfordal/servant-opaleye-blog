@@ -3,5 +3,19 @@ extra-package-dbs: []
 packages:
 - '.'
 extra-deps:
+- bytestring-conversion-0.3.1
 - datetime-0.3.1
-resolver: lts-3.17
+- double-conversion-2.0.1.0
+- http-media-0.6.4
+- opaleye-0.5.0.0
+- postgresql-libpq-0.9.1.1
+- postgresql-simple-0.5.2.1
+- product-profunctors-0.7.1.0
+- pwstore-fast-2.4.4
+- servant-0.8
+- servant-server-0.8
+- wai-app-static-3.1.5
+- wai-extra-3.0.16.1
+- postgresql-libpq-0.9.1.1
+
+resolver: ghc-8.0.1

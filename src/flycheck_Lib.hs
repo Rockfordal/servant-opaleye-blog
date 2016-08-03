@@ -5,17 +5,15 @@ module Lib
     ( startApp
     ) where
 
--- import GHC.TypeLits (Nat)
 import Network.Wai
 import Network.Wai.Handler.Warp
-import Servant -- ((:>), (:<|>), (:~>)(Nat), ServantErr, Proxy, ServerT, Handler, Proxy, serve, enter)
+import Servant ( (:> (:<|>) (:>) (:~>) Proxy)
 import Control.Monad.Trans.Reader (runReaderT)
--- import Control.Monad.Trans.Either (EitherT)
-import Control.Monad.Trans.Except (ExceptT)
+import Control.Monad.Trans.Either (EitherT)
 import Control.Monad.IO.Class (liftIO)
 import qualified Database.PostgreSQL.Simple as PGS
 
-import App (AppM)
+import App
 import Api.User
 import Api.BlogPost
 
@@ -23,11 +21,10 @@ type API = "users" :> UserAPI
       :<|> "posts" :> BlogPostAPI
 
 startApp :: IO ()
-startApp = run 3000 app
+startApp = run 8080 app
 
--- readerTToEither :: AppM :~> Handler IO
-readerTToExcept :: AppM :~> ExceptT ServantErr IO
-readerTToExcept = Nat (\r -> do con <- liftIO $ PGS.connect PGS.defaultConnectInfo
+readerTToEither :: AppM :~> EitherT ServantErr IO
+readerTToEither = Nat (\r -> do con <- liftIO $ PGS.connect PGS.defaultConnectInfo
                                                               { PGS.connectUser = "blogtutorial"
                                                               , PGS.connectPassword = "blogtutorial"
                                                               , PGS.connectDatabase = "blogtutorial"
@@ -35,7 +32,7 @@ readerTToExcept = Nat (\r -> do con <- liftIO $ PGS.connect PGS.defaultConnectIn
                                 runReaderT r con)
 
 app :: Application
-app = serve api $ enter readerTToExcept server
+app = serve api $ enter readerTToEither server
 
 api :: Proxy API
 api = Proxy
