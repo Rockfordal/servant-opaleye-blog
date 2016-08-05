@@ -17,12 +17,10 @@ import App (AppM)
 import Api.User
 import Api.BlogPost
 import Api.Shelf
--- import Api.Book
 
 type API = "users"  :> UserAPI
       :<|> "posts"  :> BlogPostAPI
       :<|> "shelfs" :> ShelfAPI
-      -- :<|> "books" :> BookAPI
 
 
 startApp :: IO ()
@@ -46,4 +44,3 @@ server :: ServerT API AppM
 server = userServer
     :<|> blogPostServer
     :<|> shelfServer
-    -- :<|> bookServer
