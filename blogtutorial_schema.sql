@@ -30,8 +30,18 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: posts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: posts; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
+
+
+CREATE TABLE shelfs (
+  id SERIAL PRIMARY KEY,
+  label character varying NOT NULL,
+  size INT4,
+  "timestamp" timestamp with time zone DEFAULT now()
+  -- room_id INT
+  );
+
 
 CREATE TABLE posts (
     id integer NOT NULL,
@@ -46,7 +56,7 @@ CREATE TABLE posts (
 -- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE posts_id_seq
+Create SEQUENCE posts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
