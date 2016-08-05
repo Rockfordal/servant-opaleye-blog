@@ -19,10 +19,13 @@ library
                      , App
                      , Api.User
                      , Api.BlogPost
+                     , Api.Shelf
                      , Models.User
                      , Models.BlogPost
+                     , Models.Shelf
                      , Queries.User
                      , Queries.BlogPost
+                     , Queries.Shelf
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , servant-server
