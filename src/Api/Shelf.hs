@@ -33,17 +33,17 @@ getShelfs = do
   con <- ask
   liftIO $ runQuery con shelfQuery
 
-getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
-getShelfById id = do
-  con <- ask
-  liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
+-- getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
+-- getShelfById id = do
+--   con <- ask
+--   liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
 
-getShelfsByEmail :: Email -> AppM [ShelfRead]
-getShelfsByEmail email = do
-  con <- ask
-  liftIO $ runQuery con (shelfsByEmailQuery email)
+-- getShelfsByEmail :: Email -> AppM [ShelfRead]
+-- getShelfsByEmail email = do
+--   con <- ask
+--   liftIO $ runQuery con (shelfsByEmailQuery email)
 
-shelfPost :: ShelfWrite -> AppM Int64
-shelfPost shelf = do
-  con <- ask
-  liftIO $ runInsert con shelfTable $ shelfToPG shelf
+-- shelfPost :: ShelfWrite -> AppM Int64
+-- shelfPost shelf = do
+--   con <- ask
+--   liftIO $ runInsert con shelfTable $ shelfToPG shelf

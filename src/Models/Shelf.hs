@@ -12,33 +12,33 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data Shelf' id title body email time = Shelf
+data Shelf' id label size email time = Shelf
                                         { shId         :: id
-                                        , shTitle      :: title
-                                        , shBody       :: body
+                                        , shLabel      :: label
+                                        , shSize       :: size
                                         , shUsersEmail :: email
                                         , shTimestamp  :: time
                                         }
 
-type ShelfRead  = Shelf' ShelfID String String Email DateTime
-type ShelfWrite = Shelf' (Maybe ShelfID) String String Email (Maybe DateTime)
+type ShelfRead  = Shelf' ShelfID String Int Email DateTime
+type ShelfWrite = Shelf' (Maybe ShelfID) String Int Email (Maybe DateTime)
 
 type ShelfColumnRead = Shelf' (Column PGInt8)
                               (Column PGText)
-                              (Column PGText)
+                              (Column PGInt4)
                               (Column PGText)
                               (Column PGTimestamptz)
 
 type ShelfColumnWrite = Shelf' (Maybe (Column PGInt8))
                                       (Column PGText)
-                                      (Column PGText)
+                                      (Column PGInt4)
                                       (Column PGText)
                                (Maybe (Column PGTimestamptz))
 
 instance ToJSON ShelfRead where
   toJSON shelf = object [ "id"        .= shId shelf
-                        , "title"     .= shTitle shelf
-                        , "body"      .= shBody shelf
+                        , "label"     .= shLabel shelf
+                        , "size"      .= shSize shelf
                         , "email"     .= shUsersEmail shelf
                         , "timestamp" .= shTimestamp shelf
                         ]
@@ -46,8 +46,8 @@ instance ToJSON ShelfRead where
 instance FromJSON ShelfWrite where
   parseJSON (Object o) = Shelf <$>
                  o .:? "id"    <*>
-                 o .:  "title" <*>
-                 o .:  "body"  <*>
+                 o .:  "label" <*>
+                 o .:  "size"  <*>
                  o .:  "email" <*>
                  o .:? "timestamp"
   parseJSON _ = mzero
@@ -56,16 +56,16 @@ $(makeAdaptorAndInstance "pShelf" ''Shelf')
 
 shelfTable :: Table ShelfColumnWrite ShelfColumnRead
 shelfTable =  Table "shelfs" (pShelf Shelf { shId         = optional "id"
-                                           , shTitle      = required "title"
-                                           , shBody       = required "body"
+                                           , shLabel      = required "label"
+                                           , shSize       = required "size"
                                            , shUsersEmail = required "users_email"
                                            , shTimestamp  = optional "timestamp"
                                            })
 
 shelfToPG :: ShelfWrite -> ShelfColumnWrite
 shelfToPG = pShelf Shelf { shId         = const Nothing
-                         , shTitle      = pgString
-                         , shBody       = pgString
+                         , shLabel      = pgString
+                         , shSize       = pgInt4
                          , shUsersEmail = pgString
                          , shTimestamp  = const Nothing
                          }

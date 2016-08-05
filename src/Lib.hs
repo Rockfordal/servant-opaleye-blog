@@ -19,8 +19,8 @@ import Api.BlogPost
 import Api.Shelf
 -- import Api.Book
 
-type API = "users" :> UserAPI
-      :<|> "posts" :> BlogPostAPI
+type API = "users"  :> UserAPI
+      :<|> "posts"  :> BlogPostAPI
       :<|> "shelfs" :> ShelfAPI
       -- :<|> "books" :> BookAPI
 
