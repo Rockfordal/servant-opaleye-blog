@@ -24,9 +24,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
-
 SET default_with_oids = false;
 
 --
@@ -34,10 +32,10 @@ SET default_with_oids = false;
 --
 
 
-CREATE TABLE shelfs (
+Create TABLE shelfs (
   id SERIAL PRIMARY KEY,
   label character varying NOT NULL,
-  size INT4,
+  size integer,
   "timestamp" timestamp with time zone DEFAULT now()
   -- room_id INT
   );
@@ -72,7 +70,7 @@ ALTER SEQUENCE posts_id_seq OWNED BY posts.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE users (
