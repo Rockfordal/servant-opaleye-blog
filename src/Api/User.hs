@@ -15,9 +15,9 @@ import Models.User
 import Queries.User
 
 type UserAPI = Get '[JSON] [UserRead]
-               :<|> Capture "email" Email :> Get '[JSON] (Maybe UserRead)
-               :<|> "verify" :> ReqBody '[JSON] UserWrite :> Post '[JSON] Bool
-               :<|> ReqBody '[JSON] UserWrite :> Post '[JSON] Int64
+          :<|> Capture "email" Email :> Get '[JSON] (Maybe UserRead)
+          :<|> "verify" :> ReqBody '[JSON] UserWrite :> Post '[JSON] Bool
+          :<|> ReqBody '[JSON] UserWrite :> Post '[JSON] Int64
 
 userAPI :: Proxy UserAPI
 userAPI = Proxy
@@ -29,19 +29,23 @@ userServer = getUsers
         :<|> postUser
 
 getUsers :: AppM [UserRead]
-getUsers = do con <- ask
-              liftIO $ runQuery con usersQuery
+getUsers = do
+  con <- ask
+  liftIO $ runQuery con usersQuery
 
 getUserByEmail :: Email -> AppM (Maybe UserRead)
-getUserByEmail email = do con <- ask
-                          liftIO $ listToMaybe <$> runQuery con (userByEmailQuery email)
+getUserByEmail email = do
+  con <- ask
+  liftIO $ listToMaybe <$> runQuery con (userByEmailQuery email)
 
 verifyUser :: UserWrite -> AppM Bool
-verifyUser user = do con <- ask
-                     dbUser <- getUserByEmail (userEmail user)
-                     return $ compareUsers dbUser user
+verifyUser user = do
+  con <- ask
+  dbUser <- getUserByEmail (userEmail user)
+  return $ compareUsers dbUser user
 
 postUser :: UserWrite -> AppM Int64
-postUser user = do con <- ask
-                   newUser <- liftIO $ userToPG user
-                   liftIO $ runInsert con userTable newUser
+postUser user = do
+  con <- ask
+  newUser <- liftIO $ userToPG user
+  liftIO $ runInsert con userTable newUser

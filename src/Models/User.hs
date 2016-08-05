@@ -19,8 +19,8 @@ data User' email pwd = User
                          { userEmail    :: email
                          , userPassword :: pwd
                          }
-type UserRead = User' Email ByteString
-type UserWrite = User' Email String
+type UserRead   = User' Email ByteString
+type UserWrite  = User' Email String
 type UserColumn = User' (Column PGText) (Column PGBytea)
 
 $(makeAdaptorAndInstance "pUser" ''User')
@@ -35,14 +35,14 @@ instance FromJSON UserWrite where
   parseJSON _ = mzero
 
 userTable :: Table UserColumn UserColumn
-userTable = Table "users" (pUser User { userEmail = required "email"
+userTable = Table "users" (pUser User { userEmail    = required "email"
                                       , userPassword = required "password"
                                       })
 
 userToPG :: UserWrite -> IO UserColumn
 userToPG user = do hashedPwd <- flip makePassword 12 . BS.pack . userPassword $ user
                    return
-                     User { userEmail = pgString . userEmail $ user
+                     User { userEmail    = pgString . userEmail $ user
                           , userPassword = pgStrictByteString hashedPwd
                           }
 

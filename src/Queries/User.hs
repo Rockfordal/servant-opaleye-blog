@@ -13,6 +13,6 @@ usersQuery = queryTable userTable
 
 userByEmailQuery :: Email -> Query UserColumn
 userByEmailQuery email = proc () -> do
-                           user <- usersQuery -< ()
+                           user     <- usersQuery -< ()
                            restrict -< userEmail user .== pgString email
-                           returnA -< user
+                           returnA  -< user
