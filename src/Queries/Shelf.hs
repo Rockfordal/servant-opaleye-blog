@@ -17,8 +17,8 @@ shelfByIdQuery id = proc () -> do
                         restrict -< shId shelf .== pgInt8 id
                         returnA  -< shelf
 
-shelfsByEmailQuery :: Email -> Query ShelfColumnRead
-shelfsByEmailQuery email = proc () -> do
-                               shelf     <- shelfQuery -< ()
-                               restrict -< shUsersEmail shelf .== pgString email
-                               returnA  -< shelf
+-- shelfsBySizeQuery :: Size -> Query ShelfColumnRead
+-- shelfsBySizeQuery size = proc () -> do
+--                                shelf     <- shelfQuery -< ()
+--                                restrict -< shSize shelf .== pgString size
+--                                returnA  -< shelf

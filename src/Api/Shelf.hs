@@ -15,9 +15,9 @@ import Models.Shelf
 import Queries.Shelf
 
 type ShelfAPI = Get '[JSON] [ShelfRead]
-              -- :<|> Capture "id" ShelfID       :> Get  '[JSON] (Maybe ShelfRead)
-              -- :<|> Capture "email" Email      :> Get  '[JSON] [ShelfRead]
-              -- :<|> ReqBody '[JSON] ShelfWrite :> Post '[JSON] Int64
+              -- :<|> Capture "id" ShelfID      :> Get  '[JSON] (Maybe ShelfRead)
+              -- :<|> Capture "size" Size       :> Get  '[JSON] [ShelfRead]
+              :<|> ReqBody '[JSON] ShelfWrite :> Post '[JSON] Int64
 
 shelfAPI :: Proxy ShelfAPI
 shelfAPI = Proxy
@@ -25,8 +25,8 @@ shelfAPI = Proxy
 shelfServer :: ServerT ShelfAPI AppM
 shelfServer = getShelfs
             -- :<|> getShelfById
-            -- :<|> getShelfByEmail
-            -- :<|> shelfPost
+            -- :<|> getShelfBySize
+            :<|> shelfPost
 
 getShelfs :: AppM [ShelfRead]
 getShelfs = do
@@ -38,12 +38,12 @@ getShelfs = do
 --   con <- ask
 --   liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
 
--- getShelfsByEmail :: Email -> AppM [ShelfRead]
--- getShelfsByEmail email = do
+-- getShelfsBySize :: Size -> AppM [ShelfRead]
+-- getShelfsBySize size = do
 --   con <- ask
 --   liftIO $ runQuery con (shelfsByEmailQuery email)
 
--- shelfPost :: ShelfWrite -> AppM Int64
--- shelfPost shelf = do
---   con <- ask
---   liftIO $ runInsert con shelfTable $ shelfToPG shelf
+shelfPost :: ShelfWrite -> AppM Int64
+shelfPost shelf = do
+  con <- ask
+  liftIO $ runInsert con shelfTable $ shelfToPG shelf
