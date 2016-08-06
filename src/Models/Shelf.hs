@@ -12,22 +12,25 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data Shelf' id label size time = Shelf
+data Shelf' id label position size time = Shelf
                                    { shId         :: id
                                    , shLabel      :: label
+                                   , shPosition   :: position
                                    , shSize       :: size
                                    , shTimestamp  :: time
                                    }
 
-type ShelfRead  = Shelf' ShelfID String Int DateTime
-type ShelfWrite = Shelf' (Maybe ShelfID) String Int (Maybe DateTime)
+type ShelfRead  = Shelf' ShelfID         String String Int DateTime
+type ShelfWrite = Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)
 
 type ShelfColumnRead = Shelf' (Column PGInt8)
+                              (Column PGText)
                               (Column PGText)
                               (Column PGInt4)
                               (Column PGTimestamptz)
 
 type ShelfColumnWrite = Shelf' (Maybe (Column PGInt8))
+                                      (Column PGText)
                                       (Column PGText)
                                       (Column PGInt4)
                                (Maybe (Column PGTimestamptz))
@@ -35,30 +38,34 @@ type ShelfColumnWrite = Shelf' (Maybe (Column PGInt8))
 instance ToJSON ShelfRead where
   toJSON shelf = object [ "id"        .= shId shelf
                         , "label"     .= shLabel shelf
+                        , "position"  .= shPosition shelf
                         , "size"      .= shSize shelf
                         , "timestamp" .= shTimestamp shelf
                         ]
 
 instance FromJSON ShelfWrite where
-  parseJSON (Object o) = Shelf <$>
-                 o .:? "id"    <*>
-                 o .:  "label" <*>
-                 o .:  "size"  <*>
+  parseJSON (Object o) = Shelf    <$>
+                 o .:? "id"       <*>
+                 o .:  "label"    <*>
+                 o .:  "position" <*>
+                 o .:  "size"     <*>
                  o .:? "timestamp"
   parseJSON _ = mzero
 
 $(makeAdaptorAndInstance "pShelf" ''Shelf')
 
 shelfTable :: Table ShelfColumnWrite ShelfColumnRead
-shelfTable =  Table "shelfs" (pShelf Shelf { shId         = optional "id"
-                                           , shLabel      = required "label"
-                                           , shSize       = required "size"
-                                           , shTimestamp  = optional "timestamp"
+shelfTable =  Table "shelfs" (pShelf Shelf { shId        = optional "id"
+                                           , shLabel     = required "label"
+                                           , shPosition  = required "position"
+                                           , shSize      = required "size"
+                                           , shTimestamp = optional "timestamp"
                                            })
 
 shelfToPG :: ShelfWrite -> ShelfColumnWrite
 shelfToPG = pShelf Shelf { shId         = const Nothing
                          , shLabel      = pgString
+                         , shPosition   = pgString
                          , shSize       = pgInt4
                          , shTimestamp  = const Nothing
                          }
