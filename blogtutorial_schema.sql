@@ -31,10 +31,26 @@ SET default_with_oids = false;
 -- Name: posts; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
+Create TABLE shelfitems (
+  id SERIAL PRIMARY KEY,
+  quantity integer,
+  shelf_id integer REFERENCES shelfs,
+  item_id integer REFERENCES shelfs,
+  "timestamp" timestamp with time zone DEFAULT now()
+  );
+
+
+Create TABLE items (
+  id SERIAL PRIMARY KEY,
+  name character varying NOT NULL,
+  "timestamp" timestamp with time zone DEFAULT now()
+  );
+
 
 Create TABLE shelfs (
   id SERIAL PRIMARY KEY,
   label character varying NOT NULL,
+  position character varying NOT NULL DEFAULT '',
   size integer,
   "timestamp" timestamp with time zone DEFAULT now()
   -- room_id INT
@@ -87,7 +103,7 @@ ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regcl
 
 
 --
--- Name: posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY posts
@@ -95,7 +111,7 @@ ALTER TABLE ONLY posts
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY users
@@ -116,11 +132,10 @@ ALTER TABLE ONLY posts
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM pgsql;
-GRANT ALL ON SCHEMA public TO pgsql;
-GRANT ALL ON SCHEMA public TO PUBLIC;
+GRANT  ALL ON SCHEMA public TO pgsql;
+GRANT  ALL ON SCHEMA public TO PUBLIC;
 
 
 --
 -- PostgreSQL database dump complete
 --
-
