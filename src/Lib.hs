@@ -7,7 +7,7 @@ module Lib
 
 import Network.Wai
 import Network.Wai.Handler.Warp
-import Servant -- ((:>), (:<|>), (:~>)(Nat), ServantErr, Proxy, ServerT, Handler, serve, enter)
+import Servant
 import Control.Monad.Trans.Reader (runReaderT)
 import Control.Monad.Trans.Except (ExceptT)
 import Control.Monad.IO.Class (liftIO)
