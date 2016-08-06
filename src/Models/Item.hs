@@ -1,0 +1,57 @@
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
+module Models.Item where
+
+import Opaleye
+import Control.Monad (mzero)
+import Data.Aeson
+import Data.DateTime (DateTime)
+import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
+import App
+
+data Item' id name time = Item
+                              { itId         :: id
+                              , itName       :: name
+                              , itTimestamp  :: time
+                              }
+
+type ItemRead  = Item' ItemID         String DateTime
+type ItemWrite = Item' (Maybe ItemID) String (Maybe DateTime)
+
+type ItemColumnRead = Item' (Column PGInt8)
+                            (Column PGText)
+                            (Column PGTimestamptz)
+
+type ItemColumnWrite = Item' (Maybe (Column PGInt8))
+                                    (Column PGText)
+                             (Maybe (Column PGTimestamptz))
+
+instance ToJSON ItemRead where
+  toJSON item = object [ "id"        .= itId item
+                       , "name"      .= itName item
+                       , "timestamp" .= itTimestamp item
+                       ]
+
+instance FromJSON ItemWrite where
+  parseJSON (Object o) = Item      <$>
+                 o .:? "id"        <*>
+                 o .:  "name"      <*>
+                 o .:? "timestamp"
+  parseJSON _ = mzero
+
+$(makeAdaptorAndInstance "pItem" ''Item')
+
+itemTable :: Table ItemColumnWrite ItemColumnRead
+itemTable =  Table "items" (pItem Item { itId        = optional "id"
+                                       , itName      = required "name"
+                                       , itTimestamp = optional "timestamp"
+                                       })
+
+itemToPG :: ItemWrite -> ItemColumnWrite
+itemToPG = pItem Item { itId         = const Nothing
+                      , itName       = pgString
+                      , itTimestamp  = const Nothing
+                      }

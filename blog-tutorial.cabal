@@ -20,12 +20,15 @@ library
                      , Api.User
                      , Api.BlogPost
                      , Api.Shelf
+                     , Api.Item
                      , Models.User
                      , Models.BlogPost
                      , Models.Shelf
+                     , Models.Item
                      , Queries.User
                      , Queries.BlogPost
                      , Queries.Shelf
+                     , Queries.Item
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , servant-server
