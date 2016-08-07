@@ -15,7 +15,7 @@ import Models.BlogPost
 import Queries.BlogPost
 
 type BlogPostAPI = Get '[JSON] [BlogPostRead]
-              :<|> Capture "id" BlogPostID       :> Get  '[JSON] (Maybe BlogPostRead)
+              :<|> Capture "id"    BlogPostID    :> Get  '[JSON] (Maybe BlogPostRead)
               :<|> Capture "email" Email         :> Get  '[JSON] [BlogPostRead]
               :<|> ReqBody '[JSON] BlogPostWrite :> Post '[JSON] Int64
 

@@ -15,33 +15,33 @@ import Models.Shelf
 import Queries.Shelf
 
 type ShelfAPI = Get '[JSON] [ShelfRead]
-              -- :<|> Capture "id" ShelfID      :> Get  '[JSON] (Maybe ShelfRead)
-              -- :<|> Capture "size" Size       :> Get  '[JSON] [ShelfRead]
-              :<|> ReqBody '[JSON] ShelfWrite :> Post '[JSON] Int64
+           :<|> Capture "id"              ShelfID    :> Get  '[JSON] (Maybe ShelfRead)
+           :<|> "size" :> Capture "size"  ShelfSize  :> Get  '[JSON] [ShelfRead]
+           :<|> ReqBody '[JSON]           ShelfWrite :> Post '[JSON] Int64
 
 shelfAPI :: Proxy ShelfAPI
 shelfAPI = Proxy
 
 shelfServer :: ServerT ShelfAPI AppM
 shelfServer = getShelfs
-            -- :<|> getShelfById
-            -- :<|> getShelfBySize
+            :<|> getShelfById
+            :<|> getShelfsBySize
             :<|> shelfPost
 
 getShelfs :: AppM [ShelfRead]
 getShelfs = do
   con <- ask
-  liftIO $ runQuery con shelfQuery
+  liftIO $ runQuery con shelfsQuery
 
--- getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
--- getShelfById id = do
---   con <- ask
---   liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
+getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
+getShelfById id = do
+  con <- ask
+  liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
 
--- getShelfsBySize :: Size -> AppM [ShelfRead]
--- getShelfsBySize size = do
---   con <- ask
---   liftIO $ runQuery con (shelfsByEmailQuery email)
+getShelfsBySize :: ShelfSize -> AppM [ShelfRead]
+getShelfsBySize size = do
+  con <- ask
+  liftIO $ runQuery con (shelfsBySizeQuery size)
 
 shelfPost :: ShelfWrite -> AppM Int64
 shelfPost shelf = do

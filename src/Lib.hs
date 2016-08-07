@@ -18,11 +18,13 @@ import Api.User
 import Api.BlogPost
 import Api.Shelf
 import Api.Item
+import Api.Depot
 
 type API = "users"  :> UserAPI
       :<|> "posts"  :> BlogPostAPI
       :<|> "shelfs" :> ShelfAPI
       :<|> "items"  :> ItemAPI
+      :<|> "depot"  :> DepotAPI
 
 
 startApp :: IO ()
@@ -47,3 +49,4 @@ server = userServer
     :<|> blogPostServer
     :<|> shelfServer
     :<|> itemServer
+    :<|> depotServer

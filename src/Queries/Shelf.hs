@@ -8,17 +8,17 @@ import Control.Arrow (returnA)
 import App
 import Models.Shelf
 
-shelfQuery :: Query ShelfColumnRead
-shelfQuery = queryTable shelfTable
+shelfsQuery :: Query ShelfColumnRead
+shelfsQuery = queryTable shelfTable
 
 shelfByIdQuery :: ShelfID -> Query ShelfColumnRead
 shelfByIdQuery id = proc () -> do
-                        shelf     <- shelfQuery -< ()
+                        shelf     <- shelfsQuery -< ()
                         restrict -< shId shelf .== pgInt8 id
                         returnA  -< shelf
 
--- shelfsBySizeQuery :: Size -> Query ShelfColumnRead
--- shelfsBySizeQuery size = proc () -> do
---                                shelf     <- shelfQuery -< ()
---                                restrict -< shSize shelf .== pgString size
---                                returnA  -< shelf
+shelfsBySizeQuery :: ShelfSize -> Query ShelfColumnRead
+shelfsBySizeQuery size = proc () -> do
+                               shelf     <- shelfsQuery -< ()
+                               restrict -< shSize shelf .== pgInt4 size
+                               returnA  -< shelf

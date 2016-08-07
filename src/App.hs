@@ -11,5 +11,8 @@ type AppM = ReaderT Connection (ExceptT ServantErr IO)
 type BlogPostID = Int64
 type ShelfID = Int64
 type ItemID = Int64
-type Email = String
+type DepotID = Int64
 
+type Email = String
+type ShelfName = String
+type ShelfSize = Int
