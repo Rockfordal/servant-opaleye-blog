@@ -11,7 +11,6 @@ import Data.Maybe (listToMaybe)
 import Data.Int (Int64)
 
 import App
-import Models.Shelf
 import Models.Item
 import Models.Depot
 import Queries.Item

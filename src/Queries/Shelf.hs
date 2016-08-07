@@ -7,6 +7,9 @@ import Control.Arrow (returnA)
 
 import App
 import Models.Shelf
+import Models.Item
+import Models.Depot
+
 
 shelfsQuery :: Query ShelfColumnRead
 shelfsQuery = queryTable shelfTable
