@@ -14,10 +14,11 @@ import App
 import Models.Shelf
 import Queries.Shelf
 
-type ShelfAPI = Get '[JSON] [ShelfRead]
-           :<|> Capture "id"              ShelfID    :> Get  '[JSON] (Maybe ShelfRead)
+type ShelfAPI =           Get '[JSON] [ShelfRead]
+           :<|>           Capture "id"    ShelfID    :> Get  '[JSON] (Maybe ShelfRead)
+           :<|>           Capture "label" ShelfLabel :> Get  '[JSON] [ShelfRead]
            :<|> "size" :> Capture "size"  ShelfSize  :> Get  '[JSON] [ShelfRead]
-           :<|> ReqBody '[JSON]           ShelfWrite :> Post '[JSON] Int64
+           :<|>           ReqBody '[JSON] ShelfWrite :> Post '[JSON] Int64
 
 shelfAPI :: Proxy ShelfAPI
 shelfAPI = Proxy
@@ -25,6 +26,7 @@ shelfAPI = Proxy
 shelfServer :: ServerT ShelfAPI AppM
 shelfServer = getShelfs
             :<|> getShelfById
+            :<|> getShelfsByLabel
             :<|> getShelfsBySize
             :<|> shelfPost
 
@@ -37,6 +39,11 @@ getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
 getShelfById id = do
   con <- ask
   liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
+
+getShelfsByLabel :: ShelfLabel -> AppM [ShelfRead]
+getShelfsByLabel name = do
+  con <- ask
+  liftIO $ runQuery con (shelfsByLabelQuery name)
 
 getShelfsBySize :: ShelfSize -> AppM [ShelfRead]
 getShelfsBySize size = do

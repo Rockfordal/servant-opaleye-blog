@@ -15,10 +15,11 @@ import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 
 import App
 
-data User' email pwd = User
-                         { userEmail    :: email
-                         , userPassword :: pwd
-                         }
+data User' a b = User
+                  { userEmail    :: a
+                  , userPassword :: b
+                  }
+
 type UserRead   = User' Email ByteString
 type UserWrite  = User' Email String
 type UserColumn = User' (Column PGText) (Column PGBytea)
@@ -30,8 +31,8 @@ instance ToJSON UserRead where
 
 instance FromJSON UserWrite where
   parseJSON (Object o) = User <$>
-                              o .: "email" <*>
-                              o .: "password"
+                 o .: "email" <*>
+                 o .: "password"
   parseJSON _ = mzero
 
 userTable :: Table UserColumn UserColumn

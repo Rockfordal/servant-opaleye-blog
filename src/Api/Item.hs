@@ -13,12 +13,15 @@ import Data.Int (Int64)
 import App
 import Models.Shelf
 import Models.Item
+import Models.Depot
 import Queries.Item
+import Queries.Depot
 
-type ItemAPI = Get '[JSON] [ItemRead]
-              :<|> Capture "id"        ItemID    :> Get  '[JSON] (Maybe ItemRead)
-              :<|> Capture "shelfname" ShelfName :> Get  '[JSON] [ShelfRead]
-              :<|> ReqBody '[JSON]     ItemWrite :> Post '[JSON] Int64
+type ItemAPI =                                          Get  '[JSON] [ItemRead]
+          :<|>            Capture "id" ItemID        :> Get  '[JSON] (Maybe ItemRead)
+          :<|> "shelf" :> Capture "id" ShelfID       :> Get  '[JSON] (Maybe DepotRead)
+          :<|> "shelf" :> Capture "label" ShelfLabel :> Get  '[JSON] [ItemRead]
+          :<|>            ReqBody '[JSON] ItemWrite  :> Post '[JSON] Int64
 
 itemAPI :: Proxy ItemAPI
 itemAPI = Proxy
@@ -26,9 +29,9 @@ itemAPI = Proxy
 itemServer :: ServerT ItemAPI AppM
 itemServer = getItems
             :<|> getItemById
-            :<|> getItemsByShelfname
+            :<|> getItemsByShelfId
+            :<|> getItemsByShelfLabel
             :<|> itemPost
-
 
 getItems :: AppM [ItemRead]
 getItems = do
@@ -40,11 +43,15 @@ getItemById id = do
   con <- ask
   liftIO $ listToMaybe <$> runQuery con (itemByIdQuery id)
 
-getItemsByShelfname :: ShelfName -> AppM [ShelfRead]
-getItemsByShelfname name = do
+getItemsByShelfId :: ShelfID -> AppM (Maybe DepotRead)
+getItemsByShelfId shelfid = do
   con <- ask
-  liftIO $ runQuery con (itemsByShelfNameQuery name)
--- itemsByShelfNameQuery :: ShelfName -> Query ShelfColumnRead
+  liftIO $ listToMaybe <$> runQuery con (itemsByShelfIdQuery shelfid)
+
+getItemsByShelfLabel :: ShelfLabel -> AppM [ItemRead]
+getItemsByShelfLabel label = do
+  con <- ask
+  liftIO $ runQuery con (itemsByShelfLabelQuery label)
 
 itemPost :: ItemWrite -> AppM Int64
 itemPost item = do

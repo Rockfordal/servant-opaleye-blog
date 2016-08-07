@@ -12,11 +12,11 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data Item' id name time = Item
-                              { itId         :: id
-                              , itName       :: name
-                              , itTimestamp  :: time
-                              }
+data Item' a b c = Item
+                    { itId        :: a
+                    , itName      :: b
+                    , itTimestamp :: c
+                    }
 
 type ItemRead  = Item' ItemID         String DateTime
 type ItemWrite = Item' (Maybe ItemID) String (Maybe DateTime)

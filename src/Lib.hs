@@ -24,7 +24,7 @@ type API = "users"  :> UserAPI
       :<|> "posts"  :> BlogPostAPI
       :<|> "shelfs" :> ShelfAPI
       :<|> "items"  :> ItemAPI
-      :<|> "depot"  :> DepotAPI
+      :<|> "depots" :> DepotAPI
 
 
 startApp :: IO ()

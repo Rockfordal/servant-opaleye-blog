@@ -12,13 +12,13 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data BlogPost' id title body email time = BlogPost
-                                            { bpId         :: id
-                                            , bpTitle      :: title
-                                            , bpBody       :: body
-                                            , bpUsersEmail :: email
-                                            , bpTimestamp  :: time
-                                            }
+data BlogPost' a b c d e =
+  BlogPost { bpId         :: a
+           , bpTitle      :: b
+           , bpBody       :: c
+           , bpUsersEmail :: d
+           , bpTimestamp  :: e
+           }
 
 type BlogPostRead  = BlogPost' BlogPostID String String Email DateTime
 type BlogPostWrite = BlogPost' (Maybe BlogPostID) String String Email (Maybe DateTime)
@@ -45,11 +45,11 @@ instance ToJSON BlogPostRead where
 
 instance FromJSON BlogPostWrite where
   parseJSON (Object o) = BlogPost <$>
-                                  o .:? "id"    <*>
-                                  o .:  "title" <*>
-                                  o .:  "body"  <*>
-                                  o .:  "email" <*>
-                                  o .:? "timestamp"
+                    o .:? "id"    <*>
+                    o .:  "title" <*>
+                    o .:  "body"  <*>
+                    o .:  "email" <*>
+                    o .:? "timestamp"
   parseJSON _ = mzero
 
 $(makeAdaptorAndInstance "pBlogPost" ''BlogPost')

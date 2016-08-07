@@ -14,5 +14,5 @@ type ItemID = Int64
 type DepotID = Int64
 
 type Email = String
-type ShelfName = String
+type ShelfLabel = String
 type ShelfSize = Int

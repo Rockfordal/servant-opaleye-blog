@@ -12,13 +12,13 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data Shelf' id label position size time = Shelf
-                                   { shId         :: id
-                                   , shLabel      :: label
-                                   , shPosition   :: position
-                                   , shSize       :: size
-                                   , shTimestamp  :: time
-                                   }
+data Shelf' a b c d e = Shelf
+                          { shId        :: a
+                          , shLabel     :: b
+                          , shPosition  :: c
+                          , shSize      :: d
+                          , shTimestamp :: e
+                          }
 
 type ShelfRead  = Shelf' ShelfID         String String Int DateTime
 type ShelfWrite = Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)

@@ -22,3 +22,9 @@ shelfsBySizeQuery size = proc () -> do
                                shelf     <- shelfsQuery -< ()
                                restrict -< shSize shelf .== pgInt4 size
                                returnA  -< shelf
+
+shelfsByLabelQuery :: ShelfLabel -> Query ShelfColumnRead
+shelfsByLabelQuery name = proc () -> do
+  shelf     <- shelfsQuery -< ()
+  restrict -< shLabel shelf .== pgString name
+  returnA  -< shelf
