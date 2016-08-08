@@ -17,26 +17,34 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib
                      , App
+                     , Ware
                      , Api.User
                      , Api.BlogPost
                      , Api.Shelf
                      , Api.Item
                      , Api.Depot
+                     , Api.Product
                      , Models.User
                      , Models.BlogPost
                      , Models.Shelf
                      , Models.Item
                      , Models.Depot
+                     , Models.Product
                      , Queries.User
                      , Queries.BlogPost
                      , Queries.Shelf
                      , Queries.Item
                      , Queries.Depot
+                     , Queries.Product
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , servant-server
+                     , http-types
                      , wai
                      , warp
+                     , wai-middleware-static
+                     , wai-extra
+                     , wai-cors
                      , either
                      , datetime
                      , opaleye

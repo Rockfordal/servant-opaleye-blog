@@ -12,7 +12,9 @@ type BlogPostID = Int64
 type ShelfID = Int64
 type ItemID = Int64
 type DepotID = Int64
+type ProductID = Int64
 
 type Email = String
 type ShelfLabel = String
+type ProductName = String
 type ShelfSize = Int

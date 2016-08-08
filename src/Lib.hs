@@ -14,29 +14,34 @@ import Control.Monad.IO.Class (liftIO)
 import qualified Database.PostgreSQL.Simple as PGS
 
 import App (AppM)
+import Ware
 import Api.User
 import Api.BlogPost
 import Api.Shelf
 import Api.Item
 import Api.Depot
+import Api.Product
 
-type API = "users"  :> UserAPI
-      :<|> "posts"  :> BlogPostAPI
-      :<|> "shelfs" :> ShelfAPI
-      :<|> "items"  :> ItemAPI
-      :<|> "depots" :> DepotAPI
+type API = "users"    :> UserAPI
+      :<|> "posts"    :> BlogPostAPI
+      :<|> "shelfs"   :> ShelfAPI
+      :<|> "items"    :> ItemAPI
+      :<|> "depots"   :> DepotAPI
+      :<|> "products" :> ProductAPI
 
 
 startApp :: IO ()
-startApp = run 3000 app
+startApp =
+  run 3000 $ myCors $ app
 
 readerTToExcept :: AppM :~> Handler
-readerTToExcept = Nat (\r -> do con <- liftIO $ PGS.connect PGS.defaultConnectInfo
-                                                          { PGS.connectUser     = "blogtutorial"
-                                                          , PGS.connectPassword = "blogtutorial"
-                                                          , PGS.connectDatabase = "blogtutorial"
-                                                          }
-                                runReaderT r con)
+readerTToExcept = Nat (\r -> do
+  con <- liftIO $ PGS.connect PGS.defaultConnectInfo
+                              { PGS.connectUser     = "blogtutorial"
+                              , PGS.connectPassword = "blogtutorial"
+                              , PGS.connectDatabase = "blogtutorial"
+                              }
+  runReaderT r con)
 
 app :: Application
 app = serve api $ enter readerTToExcept server
@@ -50,3 +55,4 @@ server = userServer
     :<|> shelfServer
     :<|> itemServer
     :<|> depotServer
+    :<|> productServer

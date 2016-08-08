@@ -31,14 +31,12 @@ SET default_with_oids = false;
 -- Name: posts; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
-Create TABLE shelfitems (
+Create TABLE products (
   id SERIAL PRIMARY KEY,
-  quantity integer,
+  name character varying NOT NULL,
   shelf_id integer REFERENCES shelfs,
-  item_id integer REFERENCES shelfs,
   "timestamp" timestamp with time zone DEFAULT now()
   );
-
 
 Create TABLE items (
   id SERIAL PRIMARY KEY,
@@ -46,6 +44,13 @@ Create TABLE items (
   "timestamp" timestamp with time zone DEFAULT now()
   );
 
+Create TABLE shelfitems (
+  id SERIAL PRIMARY KEY,
+  quantity integer,
+  shelf_id integer REFERENCES shelfs,
+  item_id integer REFERENCES shelfs,
+  "timestamp" timestamp with time zone DEFAULT now()
+  );
 
 Create TABLE shelfs (
   id SERIAL PRIMARY KEY,

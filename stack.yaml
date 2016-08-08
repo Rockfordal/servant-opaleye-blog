@@ -17,6 +17,7 @@ extra-deps:
 - auto-update-0.1.4
 - base-compat-0.9.1
 - base-orphans-0.5.4
+- base-unicode-symbols-0.2.2.4
 - base16-bytestring-0.1.1.6
 - base64-bytestring-1.0.0.1
 - bifunctors-5.4.1
@@ -42,6 +43,7 @@ extra-deps:
 - easy-file-0.2.1
 - either-4.4.1.1
 - exceptions-0.8.3
+- expiring-cache-map-0.0.5.4
 - fail-4.9.0.0
 - fast-logger-2.4.6
 - file-embed-0.0.10
@@ -108,8 +110,10 @@ extra-deps:
 - void-0.7.1
 - wai-3.2.1.1
 - wai-app-static-3.1.5
+- wai-cors-0.2.5
 - wai-extra-3.0.16.1
 - wai-logger-2.3.0
+- wai-middleware-static-0.8.0
 - warp-3.2.7
 - word8-0.1.2
 - zlib-0.6.1.1
