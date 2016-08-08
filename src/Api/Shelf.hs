@@ -5,6 +5,7 @@ module Api.Shelf where
 
 import Servant
 import Opaleye
+-- import Control.Lens (set, view)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Reader (ask)
 import Data.Maybe (listToMaybe)
@@ -15,12 +16,13 @@ import Models.Shelf
 import Queries.Shelf
 import Queries.Depot
 
-type ShelfAPI =                                         Get  '[JSON] [ShelfRead]
-           :<|>           Capture "id"    ShelfID    :> Get  '[JSON] (Maybe ShelfRead)
-           :<|>           Capture "label" ShelfLabel :> Get  '[JSON] [ShelfRead]
-           :<|> "size" :> Capture "size"  ShelfSize  :> Get  '[JSON] [ShelfRead]
-           :<|> "item" :> Capture "id"    ShelfID    :> Get  '[JSON] [ShelfRead]
-           :<|>           ReqBody '[JSON] ShelfWrite :> Post '[JSON] Int64
+type ShelfAPI =                                         Get    '[JSON] [ShelfRead]
+           :<|>           Capture "id"    ShelfID    :> Get    '[JSON] (Maybe ShelfRead)
+           :<|>           Capture "label" ShelfLabel :> Get    '[JSON] [ShelfRead]
+           :<|> "size" :> Capture "size"  ShelfSize  :> Get    '[JSON] [ShelfRead]
+           :<|> "item" :> Capture "id"    ShelfID    :> Get    '[JSON] [ShelfRead]
+           :<|>           ReqBody '[JSON] ShelfWrite :> Post   '[JSON] Int64
+           :<|>           Capture "id"    ShelfID    :> Delete '[JSON] Int64
 
 shelfAPI :: Proxy ShelfAPI
 shelfAPI = Proxy
@@ -31,7 +33,8 @@ shelfServer = getShelfs
          :<|> getShelfsByLabel
          :<|> getShelfsBySize
          :<|> getShelfsByItemId
-         :<|> shelfPost
+         :<|> postShelf
+         :<|> deleteShelf
 
 getShelfs :: AppM [ShelfRead]
 getShelfs = do
@@ -39,9 +42,9 @@ getShelfs = do
   liftIO $ runQuery con shelfsQuery
 
 getShelfById :: ShelfID -> AppM (Maybe ShelfRead)
-getShelfById id = do
+getShelfById shelfid = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery id)
+  liftIO $ listToMaybe <$> runQuery con (shelfByIdQuery shelfid)
 
 getShelfsByLabel :: ShelfLabel -> AppM [ShelfRead]
 getShelfsByLabel name = do
@@ -58,7 +61,14 @@ getShelfsByItemId itemid = do
   con <- ask
   liftIO $ runQuery con (shelfsByItemIdQuery itemid)
 
-shelfPost :: ShelfWrite -> AppM Int64
-shelfPost shelf = do
+postShelf :: ShelfWrite -> AppM Int64
+postShelf shelf = do
   con <- ask
   liftIO $ runInsert con shelfTable $ shelfToPG shelf
+
+deleteShelf :: ShelfID -> AppM Int64
+deleteShelf idToMatch = do
+  con <- ask
+  liftIO $ runDelete con shelfTable match
+  where
+    match = (\s -> (shId s) .=== (pgInt8 idToMatch))
