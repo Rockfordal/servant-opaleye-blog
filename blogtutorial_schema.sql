@@ -140,6 +140,8 @@ REVOKE ALL ON SCHEMA public FROM pgsql;
 GRANT  ALL ON SCHEMA public TO pgsql;
 GRANT  ALL ON SCHEMA public TO PUBLIC;
 
+-- GRANT ALL PRIVILEGES ON products TO blogtutorial;
+-- GRANT USAGE, SELECT  ON SEQUENCE products_id_seq TO blogtutorial;
 
 --
 -- PostgreSQL database dump complete

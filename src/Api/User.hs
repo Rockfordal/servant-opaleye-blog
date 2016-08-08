@@ -18,6 +18,7 @@ type UserAPI = Get '[JSON] [UserRead]
           :<|> Capture "email" Email :> Get '[JSON] (Maybe UserRead)
           :<|> "verify" :> ReqBody '[JSON] UserWrite :> Post '[JSON] Bool
           :<|> ReqBody '[JSON] UserWrite :> Post '[JSON] Int64
+          -- :<|> Capture "id" UserID    :> Delete '[JSON] Int64
 
 userAPI :: Proxy UserAPI
 userAPI = Proxy
@@ -27,6 +28,7 @@ userServer = getUsers
         :<|> getUserByEmail
         :<|> verifyUser
         :<|> postUser
+        -- :<|> deleteUser
 
 getUsers :: AppM [UserRead]
 getUsers = do
@@ -49,3 +51,10 @@ postUser user = do
   con <- ask
   newUser <- liftIO $ userToPG user
   liftIO $ runInsert con userTable newUser
+
+-- deleteUser :: UserID -> AppM Int64
+-- deleteUser idToMatch = do
+--   con <- ask
+--   liftIO $ runDelete con userTable match
+--   where
+--     match = (\d -> (uId d) .=== (pgInt8 idToMatch))

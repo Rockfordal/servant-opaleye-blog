@@ -16,11 +16,12 @@ import Models.Depot
 import Queries.Item
 import Queries.Depot
 
-type ItemAPI =                                          Get  '[JSON] [ItemRead]
-          :<|>            Capture "id" ItemID        :> Get  '[JSON] (Maybe ItemRead)
-          :<|> "shelf" :> Capture "id" ShelfID       :> Get  '[JSON] (Maybe DepotRead)
-          :<|> "shelf" :> Capture "label" ShelfLabel :> Get  '[JSON] [ItemRead]
-          :<|>            ReqBody '[JSON] ItemWrite  :> Post '[JSON] Int64
+type ItemAPI =                                          Get    '[JSON] [ItemRead]
+          :<|>            Capture "id"    ItemID     :> Get    '[JSON] (Maybe ItemRead)
+          :<|> "shelf" :> Capture "id"    ShelfID    :> Get    '[JSON] (Maybe DepotRead)
+          :<|> "shelf" :> Capture "label" ShelfLabel :> Get    '[JSON] [ItemRead]
+          :<|>            ReqBody '[JSON] ItemWrite  :> Post   '[JSON] Int64
+          :<|>            Capture "id"    ItemID     :> Delete '[JSON] Int64
 
 itemAPI :: Proxy ItemAPI
 itemAPI = Proxy
@@ -30,7 +31,8 @@ itemServer = getItems
             :<|> getItemById
             :<|> getItemsByShelfId
             :<|> getItemsByShelfLabel
-            :<|> itemPost
+            :<|> postItem
+            :<|> deleteItem
 
 getItems :: AppM [ItemRead]
 getItems = do
@@ -52,7 +54,14 @@ getItemsByShelfLabel label = do
   con <- ask
   liftIO $ runQuery con (itemsByShelfLabelQuery label)
 
-itemPost :: ItemWrite -> AppM Int64
-itemPost item = do
+postItem :: ItemWrite -> AppM Int64
+postItem item = do
   con <- ask
   liftIO $ runInsert con itemTable $ itemToPG item
+
+deleteItem :: ItemID -> AppM Int64
+deleteItem idToMatch = do
+  con <- ask
+  liftIO $ runDelete con itemTable match
+  where
+    match = (\i -> (itId i) .=== (pgInt8 idToMatch))

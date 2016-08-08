@@ -16,6 +16,12 @@ import Queries.Item
 depotsQuery :: Query DepotColumnRead
 depotsQuery = queryTable depotTable
 
+depotByIdQuery :: DepotID -> Query DepotColumnRead
+depotByIdQuery depotid = proc () -> do
+                        depot     <- depotsQuery -< ()
+                        restrict -<  dpId depot .== pgInt8 depotid
+                        returnA  -<  depot
+
 itemsByShelfLabelQuery :: ShelfLabel -> Query ItemColumnRead
 itemsByShelfLabelQuery label = proc () -> do
                                 depot     <- depotsQuery -< ()

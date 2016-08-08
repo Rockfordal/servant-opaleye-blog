@@ -30,9 +30,9 @@ instance ToJSON UserRead where
   toJSON user = object [ "email" .= userEmail user ]
 
 instance FromJSON UserWrite where
-  parseJSON (Object o) = User <$>
-                 o .: "email" <*>
-                 o .: "password"
+  parseJSON (Object o) = User    <$>
+                    o .: "email" <*>
+                    o .: "password"
   parseJSON _ = mzero
 
 userTable :: Table UserColumn UserColumn
