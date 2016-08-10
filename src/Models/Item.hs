@@ -12,26 +12,30 @@ import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
-data Item' a b c = Item
+data Item' a b c d = Item
                     { itId        :: a
                     , itName      :: b
-                    , itTimestamp :: c
+                    , itInfo      :: c
+                    , itTimestamp :: d
                     }
 
-type ItemRead  = Item' ItemID         String DateTime
-type ItemWrite = Item' (Maybe ItemID) String (Maybe DateTime)
+type ItemRead  = Item' ItemID         String String DateTime
+type ItemWrite = Item' (Maybe ItemID) String String (Maybe DateTime)
 
 type ItemColumnRead = Item' (Column PGInt8)
+                            (Column PGText)
                             (Column PGText)
                             (Column PGTimestamptz)
 
 type ItemColumnWrite = Item' (Maybe (Column PGInt8))
                                     (Column PGText)
+                                    (Column PGText)
                              (Maybe (Column PGTimestamptz))
 
 instance ToJSON ItemRead where
-  toJSON item = object [ "id"        .= itId item
-                       , "name"      .= itName item
+  toJSON item = object [ "id"        .= itId        item
+                       , "name"      .= itName      item
+                       , "info"      .= itInfo      item
                        , "timestamp" .= itTimestamp item
                        ]
 
@@ -39,6 +43,7 @@ instance FromJSON ItemWrite where
   parseJSON (Object o) = Item      <$>
                  o .:? "id"        <*>
                  o .:  "name"      <*>
+                 o .:  "info"      <*>
                  o .:? "timestamp"
   parseJSON _ = mzero
 
@@ -47,11 +52,13 @@ $(makeAdaptorAndInstance "pItem" ''Item')
 itemTable :: Table ItemColumnWrite ItemColumnRead
 itemTable =  Table "items" (pItem Item { itId        = optional "id"
                                        , itName      = required "name"
+                                       , itInfo      = required "info"
                                        , itTimestamp = optional "timestamp"
                                        })
 
 itemToPG :: ItemWrite -> ItemColumnWrite
 itemToPG = pItem Item { itId         = const Nothing
                       , itName       = pgString
+                      , itInfo       = pgString
                       , itTimestamp  = const Nothing
                       }
