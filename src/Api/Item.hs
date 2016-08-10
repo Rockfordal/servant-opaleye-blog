@@ -28,11 +28,11 @@ itemAPI = Proxy
 
 itemServer :: ServerT ItemAPI AppM
 itemServer = getItems
-            :<|> getItemById
-            :<|> getItemsByShelfId
-            :<|> getItemsByShelfLabel
-            :<|> postItem
-            :<|> deleteItem
+        :<|> getItemById
+        :<|> getItemsByShelfId
+        :<|> getItemsByShelfLabel
+        :<|> postItem
+        :<|> deleteItem
 
 getItems :: AppM [ItemRead]
 getItems = do
