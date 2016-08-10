@@ -23,9 +23,9 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
-SET search_path = public, pg_catalog;
+SET search_path        = public, pg_catalog;
 SET default_tablespace = '';
-SET default_with_oids = false;
+SET default_with_oids  = false;
 
 --
 -- Name: posts; Type: TABLE; Schema: public; Owner: -; Tablespace:
@@ -33,39 +33,40 @@ SET default_with_oids = false;
 
 Create TABLE products (
   id SERIAL PRIMARY KEY,
-  name character varying NOT NULL,
-  shelf_id integer REFERENCES shelfs,
+  name        character varying NOT NULL,
+  shelf_id    integer REFERENCES shelfs,
   "timestamp" timestamp with time zone DEFAULT now()
   );
 
 Create TABLE items (
   id SERIAL PRIMARY KEY,
-  name character varying NOT NULL,
-  "timestamp" timestamp with time zone DEFAULT now()
+  name        character varying NOT NULL,
+  info        character varying NOT NULL DEFAULT '',
+  "Timestamp" timestamp with time zone DEFAULT now()
   );
 
 Create TABLE shelfitems (
   id SERIAL PRIMARY KEY,
-  quantity integer,
-  shelf_id integer REFERENCES shelfs,
-  item_id integer REFERENCES shelfs,
+  quantity    integer,
+  shelf_id    integer REFERENCES shelfs,
+  item_id     integer REFERENCES shelfs,
   "timestamp" timestamp with time zone DEFAULT now()
   );
 
 Create TABLE shelfs (
   id SERIAL PRIMARY KEY,
-  label character varying NOT NULL,
-  position character varying NOT NULL DEFAULT '',
-  size integer,
+  label       character varying NOT NULL,
+  position    character varying NOT NULL DEFAULT '',
+  size        integer,
   "timestamp" timestamp with time zone DEFAULT now()
   -- room_id INT
   );
 
 
 CREATE TABLE posts (
-    id integer NOT NULL,
-    title character varying NOT NULL,
-    body character varying NOT NULL,
+    id          integer NOT NULL,
+    title       character varying NOT NULL,
+    body        character varying NOT NULL,
     users_email character varying NOT NULL,
     "timestamp" timestamp with time zone DEFAULT now()
 );
