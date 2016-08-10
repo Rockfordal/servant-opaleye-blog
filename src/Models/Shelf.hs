@@ -35,6 +35,7 @@ type ShelfColumnWrite = Shelf' (Maybe (Column PGInt8))
                                       (Column PGInt4)
                                (Maybe (Column PGTimestamptz))
 
+
 instance ToJSON ShelfRead where
   toJSON shelf = object [ "id"        .= shId shelf
                         , "label"     .= shLabel shelf
@@ -55,12 +56,13 @@ instance FromJSON ShelfWrite where
 $(makeAdaptorAndInstance "pShelf" ''Shelf')
 
 shelfTable :: Table ShelfColumnWrite ShelfColumnRead
-shelfTable =  Table "shelfs" (pShelf Shelf { shId        = optional "id"
-                                           , shLabel     = required "label"
-                                           , shPosition  = required "position"
-                                           , shSize      = required "size"
-                                           , shTimestamp = optional "timestamp"
-                                           })
+shelfTable =  Table "shelfs" $ pShelf Shelf { shId        = optional "id"
+                                            -- { shId        = pShelfId . ShelfId $ optional "id"
+                                            , shLabel     = required "label"
+                                            , shPosition  = required "position"
+                                            , shSize      = required "size"
+                                            , shTimestamp = optional "timestamp"
+                                            }
 
 shelfToPG :: ShelfWrite -> ShelfColumnWrite
 shelfToPG = pShelf Shelf { shId         = const Nothing
