@@ -69,6 +69,9 @@ postShelf shelf = do
 deleteShelf :: ShelfID -> AppM Int64
 deleteShelf idToMatch = do
   con <- ask
-  liftIO $ runDelete con shelfTable match
+  res <- liftIO $ runDelete con shelfTable match
+  if res == 1
+    then return idToMatch
+    else return 0
   where
     match = (\s -> (shId s) .=== (pgInt8 idToMatch))
