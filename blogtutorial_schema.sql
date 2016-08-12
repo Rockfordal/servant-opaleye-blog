@@ -49,7 +49,7 @@ Create TABLE shelfitems (
   id SERIAL PRIMARY KEY,
   quantity    integer,
   shelf_id    integer REFERENCES shelfs,
-  item_id     integer REFERENCES shelfs,
+  item_id     integer REFERENCES items,
   "timestamp" timestamp with time zone DEFAULT now()
   );
 
@@ -61,6 +61,10 @@ Create TABLE shelfs (
   "timestamp" timestamp with time zone DEFAULT now()
   -- room_id INT
   );
+
+
+
+
 
 
 CREATE TABLE posts (
