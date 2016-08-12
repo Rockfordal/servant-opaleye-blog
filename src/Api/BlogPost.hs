@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.BlogPost where
 
 import Servant
@@ -36,9 +35,9 @@ getPosts = do
   liftIO $ runQuery con blogPostsQuery
 
 getPostById :: BlogPostID -> AppM (Maybe BlogPostRead)
-getPostById id = do
+getPostById idToMatch = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (blogPostByIdQuery id)
+  liftIO $ listToMaybe <$> runQuery con (blogPostByIdQuery idToMatch)
 
 getPostsByEmail :: Email -> AppM [BlogPostRead]
 getPostsByEmail email = do
@@ -55,4 +54,4 @@ deletePost idToMatch = do
   con <- ask
   liftIO $ runDelete con blogPostTable match
   where
-    match = (\p -> (bpId p) .=== (pgInt8 idToMatch))
+    match p = bpId p .=== pgInt8 idToMatch

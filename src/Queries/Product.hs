@@ -1,5 +1,4 @@
 {-# LANGUAGE Arrows #-}
-
 module Queries.Product where
 
 import Opaleye

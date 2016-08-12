@@ -1,10 +1,8 @@
 {-# LANGUAGE Arrows #-}
-
 module Queries.Depot where
 
 import Opaleye
 import Control.Arrow (returnA)
--- import Control.Lens (^.) -- (makeLenses,(^.),(.~),(%~),to,_1)
 
 import App
 import Models.Depot
@@ -23,13 +21,13 @@ depotByIdQuery depotid = proc () -> do
                         returnA  -<  depot
 
 itemsByShelfLabelQuery :: ShelfLabel -> Query ItemColumnRead
-itemsByShelfLabelQuery label = proc () -> do
+itemsByShelfLabelQuery text = proc () -> do
                                 depot     <- depotsQuery -< ()
                                 shelf     <- shelfsQuery -< ()
                                 item      <- itemsQuery  -< ()
                                 restrict -< dpShelfId depot .== shId shelf
                                 restrict -< dpItemId depot  .== itId item
-                                restrict -< shLabel shelf   .== pgString label
+                                restrict -< shLabel shelf   .== pgString text
                                 returnA  -< item
 
 shelfsByItemIdQuery :: ItemID -> Query ShelfColumnRead

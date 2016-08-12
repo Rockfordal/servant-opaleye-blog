@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.Product where
 
 import Servant
@@ -36,9 +35,9 @@ getProducts = do
   liftIO $ runQuery con productsQuery
 
 getProductById :: ProductID -> AppM (Maybe ProductRead)
-getProductById id = do
+getProductById idToMatch = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (productByIdQuery id)
+  liftIO $ listToMaybe <$> runQuery con (productByIdQuery idToMatch)
 
 getProductsByName :: ProductName -> AppM [ProductRead]
 getProductsByName name = do
@@ -46,13 +45,13 @@ getProductsByName name = do
   liftIO $ runQuery con (productsByNameQuery name)
 
 postProduct :: ProductWrite -> AppM Int64
-postProduct product = do
+postProduct prod = do
   con <- ask
-  liftIO $ runInsert con productTable $ productToPG product
+  liftIO $ runInsert con productTable $ productToPG prod
 
 deleteProduct :: ProductID -> AppM Int64
 deleteProduct idToMatch = do
   con <- ask
   liftIO $ runDelete con productTable match
   where
-    match = (\p -> (prId p) .=== (pgInt8 idToMatch))
+    match p = prId p .=== pgInt8 idToMatch

@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.Item where
 
 import Servant
@@ -40,9 +39,9 @@ getItems = do
   liftIO $ runQuery con itemsQuery
 
 getItemById :: ItemID -> AppM (Maybe ItemRead)
-getItemById id = do
+getItemById idToMatch = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (itemByIdQuery id)
+  liftIO $ listToMaybe <$> runQuery con (itemByIdQuery idToMatch)
 
 getItemsByShelfId :: ShelfID -> AppM (Maybe DepotRead)
 getItemsByShelfId shelfid = do
@@ -50,9 +49,9 @@ getItemsByShelfId shelfid = do
   liftIO $ listToMaybe <$> runQuery con (itemsByShelfIdQuery shelfid)
 
 getItemsByShelfLabel :: ShelfLabel -> AppM [ItemRead]
-getItemsByShelfLabel label = do
+getItemsByShelfLabel text = do
   con <- ask
-  liftIO $ runQuery con (itemsByShelfLabelQuery label)
+  liftIO $ runQuery con (itemsByShelfLabelQuery text)
 
 postItem :: ItemWrite -> AppM Int64
 postItem item = do
@@ -64,4 +63,5 @@ deleteItem idToMatch = do
   con <- ask
   liftIO $ runDelete con itemTable match
   where
-    match = (\i -> (itId i) .=== (pgInt8 idToMatch))
+    -- match = (\i -> (itId i) .=== (pgInt8 idToMatch))
+    match i = itId i .=== pgInt8 idToMatch

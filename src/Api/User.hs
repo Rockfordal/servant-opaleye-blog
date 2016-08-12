@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.User where
 
 import Servant
@@ -42,7 +41,6 @@ getUserByEmail email = do
 
 verifyUser :: UserWrite -> AppM Bool
 verifyUser user = do
-  con <- ask
   dbUser <- getUserByEmail (userEmail user)
   return $ compareUsers dbUser user
 
