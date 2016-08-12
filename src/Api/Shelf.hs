@@ -70,8 +70,8 @@ deleteShelf :: ShelfID -> AppM Int64
 deleteShelf idToMatch = do
   con <- ask
   res <- liftIO $ runDelete con shelfTable match
-  if res == 1
-    then return idToMatch
-    else return 0
+  case res of
+    1 -> pure idToMatch
+    _ -> throwError err404
   where
     match = (\s -> (shId s) .=== (pgInt8 idToMatch))
