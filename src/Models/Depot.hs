@@ -24,8 +24,6 @@ data Depot' a b c d e =
 
 type DepotRead  = Depot' DepotID         ShelfID ItemID Int DateTime
 type DepotWrite = Depot' (Maybe DepotID) ShelfID ItemID Int (Maybe DateTime)
--- type DepotRead  = Depot' DepotID         Int DateTime
--- type DepotWrite = Depot' (Maybe DepotID) Int (Maybe DateTime)
 
 type DepotColumnRead = Depot' (Column PGInt8)
                               (Column PGInt8)

@@ -8,7 +8,6 @@ import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 import Control.Monad.Trans.Reader (runReaderT)
--- import Control.Monad.Trans.Except (ExceptT)
 import Control.Monad.IO.Class (liftIO)
 import qualified Database.PostgreSQL.Simple as PGS
 
