@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.Depot where
 
 import Servant
@@ -34,9 +33,9 @@ getDepots = do
   liftIO $ runQuery con depotsQuery
 
 getDepotById :: DepotID -> AppM (Maybe DepotRead)
-getDepotById id = do
+getDepotById idToMatch = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (depotByIdQuery id)
+  liftIO $ listToMaybe <$> runQuery con (depotByIdQuery idToMatch)
 
 postDepot :: DepotWrite -> AppM Int64
 postDepot depot = do
@@ -48,7 +47,7 @@ deleteDepot idToMatch = do
   con <- ask
   liftIO $ runDelete con depotTable match
   where
-    match = (\d -> (dpId d) .=== (pgInt8 idToMatch))
+    match d = dpId d .=== pgInt8 idToMatch
 
 -- getOrphanDepots :: AppM [DepotRead]
 -- getOrphanDepots = do

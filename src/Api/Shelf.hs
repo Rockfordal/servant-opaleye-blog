@@ -1,11 +1,9 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-
 module Api.Shelf where
 
 import Servant
 import Opaleye
--- import Control.Lens (set, view)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Reader (ask)
 import Data.Maybe (listToMaybe)
@@ -74,4 +72,4 @@ deleteShelf idToMatch = do
     1 -> pure idToMatch
     _ -> throwError err404
   where
-    match = (\s -> (shId s) .=== (pgInt8 idToMatch))
+    match s = shId s .=== pgInt8 idToMatch

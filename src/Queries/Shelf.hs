@@ -1,5 +1,4 @@
 {-# LANGUAGE Arrows #-}
-
 module Queries.Shelf where
 
 import Opaleye

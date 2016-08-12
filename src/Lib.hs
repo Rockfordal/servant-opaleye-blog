@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE TypeOperators   #-}
-
 module Lib
     ( startApp
     ) where
@@ -9,7 +8,7 @@ import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 import Control.Monad.Trans.Reader (runReaderT)
-import Control.Monad.Trans.Except (ExceptT)
+-- import Control.Monad.Trans.Except (ExceptT)
 import Control.Monad.IO.Class (liftIO)
 import qualified Database.PostgreSQL.Simple as PGS
 
@@ -32,7 +31,7 @@ type API = "users"    :> UserAPI
 
 startApp :: IO ()
 startApp =
-  run 3000 $ myCors $ app
+  run 3000 $ myCors app
 
 readerTToExcept :: AppM :~> Handler
 readerTToExcept = Nat (\r -> do

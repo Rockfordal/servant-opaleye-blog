@@ -1,5 +1,4 @@
 {-# LANGUAGE Arrows #-}
-
 module Queries.BlogPost where
 
 import Opaleye
@@ -12,9 +11,9 @@ blogPostsQuery :: Query BPColumnRead
 blogPostsQuery = queryTable blogPostTable
 
 blogPostByIdQuery :: BlogPostID -> Query BPColumnRead
-blogPostByIdQuery id = proc () -> do
+blogPostByIdQuery idToMatch = proc () -> do
                          post     <- blogPostsQuery -< ()
-                         restrict -< bpId post .== pgInt8 id
+                         restrict -< bpId post .== pgInt8 idToMatch
                          returnA  -< post
 
 blogPostsByEmailQuery :: Email -> Query BPColumnRead

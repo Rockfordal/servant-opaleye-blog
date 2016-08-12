@@ -1,5 +1,4 @@
 {-# LANGUAGE Arrows #-}
-
 module Queries.User where
 
 import Opaleye
