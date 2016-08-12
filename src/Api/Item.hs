@@ -3,9 +3,11 @@
 module Api.Item where
 
 import Servant
+import Servant.Server.Internal.ServantErr
 import Opaleye
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Reader (ask)
+import Control.Monad.Except
 import Data.Maybe (listToMaybe)
 import Data.Int (Int64)
 
@@ -44,9 +46,9 @@ getItemById idToMatch = do
   liftIO $ listToMaybe <$> runQuery con (itemByIdQuery idToMatch)
 
 getItemsByShelfId :: ShelfID -> AppM (Maybe DepotRead)
-getItemsByShelfId shelfid = do
+getItemsByShelfId idToMatch = do
   con <- ask
-  liftIO $ listToMaybe <$> runQuery con (itemsByShelfIdQuery shelfid)
+  liftIO $ listToMaybe <$> runQuery con (itemsByShelfIdQuery idToMatch)
 
 getItemsByShelfLabel :: ShelfLabel -> AppM [ItemRead]
 getItemsByShelfLabel text = do
@@ -61,7 +63,10 @@ postItem item = do
 deleteItem :: ItemID -> AppM Int64
 deleteItem idToMatch = do
   con <- ask
-  liftIO $ runDelete con itemTable match
+  res <- liftIO $ runDelete con itemTable match
+  case res of
+    1 -> pure idToMatch
+    _ -> throwError err404
+
   where
-    -- match = (\i -> (itId i) .=== (pgInt8 idToMatch))
     match i = itId i .=== pgInt8 idToMatch
