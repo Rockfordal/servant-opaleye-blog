@@ -17,6 +17,7 @@ import Models.Depot
 import Queries.Item
 import Queries.Depot
 
+
 type ItemAPI =                                          Get    '[JSON] [ItemRead]
           :<|>            Capture "id"    ItemID     :> Get    '[JSON] (Maybe ItemRead)
           :<|> "shelf" :> Capture "id"    ShelfID    :> Get    '[JSON] (Maybe DepotRead)

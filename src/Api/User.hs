@@ -13,10 +13,11 @@ import App
 import Models.User
 import Queries.User
 
+
 type UserAPI = Get '[JSON] [UserRead]
-          :<|> Capture "email" Email :> Get '[JSON] (Maybe UserRead)
+          :<|> Capture "email" Email                 :> Get  '[JSON] (Maybe UserRead)
           :<|> "verify" :> ReqBody '[JSON] UserWrite :> Post '[JSON] Bool
-          :<|> ReqBody '[JSON] UserWrite :> Post '[JSON] Int64
+          :<|> ReqBody             '[JSON] UserWrite :> Post '[JSON] Int64
           -- :<|> Capture "id" UserID    :> Delete '[JSON] Int64
 
 userAPI :: Proxy UserAPI

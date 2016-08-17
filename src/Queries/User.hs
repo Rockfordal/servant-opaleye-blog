@@ -7,6 +7,7 @@ import Control.Arrow (returnA)
 import App
 import Models.User
 
+
 usersQuery :: Query UserColumn
 usersQuery = queryTable userTable
 

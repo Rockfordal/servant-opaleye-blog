@@ -12,12 +12,13 @@ import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
 
 data Depot' a b c d e =
-  Depot { dpId        :: a
-        , dpShelfId   :: b
-        , dpItemId    :: c
-        , dpQuantity  :: d
-        , dpTimestamp :: e
-        }
+  Depot
+    { dpId        :: a
+    , dpShelfId   :: b
+    , dpItemId    :: c
+    , dpQuantity  :: d
+    , dpTimestamp :: e
+    }
 
 -- type ColumnNullableDepot = Depot' (Column (Nullable PGText))
 --                                   (Column (Nullable PGDate))
@@ -59,13 +60,11 @@ $(makeAdaptorAndInstance "pDepot" ''Depot')
 
 depotTable :: Table DepotColumnWrite DepotColumnRead
 depotTable =  Table "shelfitems" (pDepot Depot { dpId        = optional "id"
-                                           -- , dpShelfId   = pShelfId . ShelfId $ required "shelf_id"
-                                           -- , dpItemId    = pItemId . ItemId $ required "item_id"
-                                           , dpShelfId   = required "shelf_id"
-                                           , dpItemId    = required "item_id"
-                                           , dpQuantity  = required "quantity"
-                                           , dpTimestamp = optional "timestamp"
-                                           })
+                                               , dpShelfId   = required "shelf_id"
+                                               , dpItemId    = required "item_id"
+                                               , dpQuantity  = required "quantity"
+                                               , dpTimestamp = optional "timestamp"
+                                               })
 
 depotToPG :: DepotWrite -> DepotColumnWrite
 depotToPG = pDepot Depot { dpId         = const Nothing

@@ -13,6 +13,7 @@ import App
 import Models.Depot
 import Queries.Depot
 
+
 type DepotAPI =                           Get    '[JSON] [DepotRead]
        :<|> Capture "id" DepotID       :> Get    '[JSON] (Maybe DepotRead)
        :<|> ReqBody '[JSON] DepotWrite :> Post   '[JSON] Int64

@@ -7,6 +7,7 @@ import Control.Arrow (returnA)
 import App
 import Models.Item
 
+
 itemsQuery :: Query ItemColumnRead
 itemsQuery = queryTable itemTable
 

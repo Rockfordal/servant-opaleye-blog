@@ -18,6 +18,6 @@ blogPostByIdQuery idToMatch = proc () -> do
 
 blogPostsByEmailQuery :: Email -> Query BPColumnRead
 blogPostsByEmailQuery email = proc () -> do
-                                post     <- blogPostsQuery -< ()
-                                restrict -< bpUsersEmail post .== pgString email
-                                returnA  -< post
+                          post     <- blogPostsQuery -< ()
+                          restrict -< bpUsersEmail post .== pgString email
+                          returnA  -< post

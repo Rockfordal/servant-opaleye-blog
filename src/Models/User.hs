@@ -14,10 +14,11 @@ import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 
 import App
 
-data User' a b = User
-                  { userEmail    :: a
-                  , userPassword :: b
-                  }
+data User' a b =
+  User
+    { userEmail    :: a
+    , userPassword :: b
+    }
 
 type UserRead   = User' Email ByteString
 type UserWrite  = User' Email String

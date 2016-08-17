@@ -14,6 +14,7 @@ import Models.Shelf
 import Queries.Shelf
 import Queries.Depot
 
+
 type ShelfAPI =                                         Get    '[JSON] [ShelfRead]
            :<|>           Capture "id"    ShelfID    :> Get    '[JSON] (Maybe ShelfRead)
            :<|>           Capture "label" ShelfLabel :> Get    '[JSON] [ShelfRead]

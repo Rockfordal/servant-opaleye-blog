@@ -6,6 +6,7 @@ import Control.Monad.Trans.Reader (ReaderT)
 import Servant (ServantErr)
 import Database.PostgreSQL.Simple (Connection)
 
+
 type AppM = ReaderT Connection (ExceptT ServantErr IO)
 
 type BlogPostID = Int64

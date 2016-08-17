@@ -13,6 +13,7 @@ import App
 import Models.Product
 import Queries.Product
 
+
 type ProductAPI =                                         Get    '[JSON] [ProductRead]
            :<|>           Capture "id"    ProductID    :> Get    '[JSON] (Maybe ProductRead)
            :<|>           Capture "name"  ProductName  :> Get    '[JSON] [ProductRead]

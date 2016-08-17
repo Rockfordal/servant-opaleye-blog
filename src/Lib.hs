@@ -20,6 +20,7 @@ import Api.Item
 import Api.Depot
 import Api.Product
 
+
 type API = "users"    :> UserAPI
       :<|> "posts"    :> BlogPostAPI
       :<|> "shelfs"   :> ShelfAPI
@@ -29,8 +30,7 @@ type API = "users"    :> UserAPI
 
 
 startApp :: IO ()
-startApp =
-  run 3000 $ myCors app
+startApp = run 3000 $ myCors app
 
 readerTToExcept :: AppM :~> Handler
 readerTToExcept = Nat (\r -> do
