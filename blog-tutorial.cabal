@@ -11,14 +11,13 @@ copyright:           2016 Author Here
 category:            Web
 build-type:          Simple
 -- extra-source-files:
-cabal-version:    >= 1.10
+cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
   exposed-modules:     Lib
                      , App
                      , Ware
-                     , Api.Auth
                      , Api.User
                      , Api.BlogPost
                      , Api.Shelf
@@ -41,7 +40,6 @@ library
                      , aeson
                      , lens
                      , mtl
-                     , servant
                      , servant-server
                      , http-types
                      , wai
@@ -57,8 +55,6 @@ library
                      , postgresql-simple
                      , transformers
                      , pwstore-fast
-                     , containers
-                     , text
                      -- , postgresql-libpq
   default-language:    Haskell2010
 
