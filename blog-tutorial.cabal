@@ -18,29 +18,33 @@ library
   exposed-modules:     Lib
                      , App
                      , Ware
-                     , Api.User
-                     , Api.BlogPost
-                     , Api.Shelf
-                     , Api.Item
-                     , Api.Depot
-                     , Api.Product
-                     , Models.User
-                     , Models.BlogPost
-                     , Models.Shelf
-                     , Models.Item
-                     , Models.Depot
-                     , Models.Product
-                     , Queries.User
-                     , Queries.BlogPost
-                     , Queries.Shelf
-                     , Queries.Item
-                     , Queries.Depot
-                     , Queries.Product
+                     , Api.Auth
+                    --  , Api.User
+                    --  , Api.BlogPost
+                    --  , Api.Shelf
+                    --  , Api.Item
+                    --  , Api.Depot
+                    --  , Api.Product
+                    --  , Models.User
+                    --  , Models.BlogPost
+                    --  , Models.Shelf
+                    --  , Models.Item
+                    --  , Models.Depot
+                    --  , Models.Product
+                    --  , Queries.User
+                    --  , Queries.BlogPost
+                    --  , Queries.Shelf
+                    --  , Queries.Item
+                    --  , Queries.Depot
+                    --  , Queries.Product
   build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , text
                      , aeson
                      , lens
                      , mtl
                      , servant-server
+                     , servant
                      , http-types
                      , wai
                      , warp

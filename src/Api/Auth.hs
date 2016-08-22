@@ -85,7 +85,7 @@ authCheck =
 -- Basic Authentication requires a Context Entry with the 'BasicAuthCheck' value
 -- tagged with "foo-tag" This context is then supplied to 'server' and threaded
 -- to the BasicAuth HasServer handlers.
---basicAuthServerContext :: Context (BasicAuthCheck User ': '[])
+basicAuthServerContext :: Context (BasicAuthCheck User ': '[])
 basicAuthServerContext = authCheck :. EmptyContext
 
 
