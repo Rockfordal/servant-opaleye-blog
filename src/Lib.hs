@@ -13,44 +13,54 @@ import qualified Database.PostgreSQL.Simple as PGS
 
 import App (AppM)
 import Ware
-import Api.User
-import Api.BlogPost
-import Api.Shelf
-import Api.Item
-import Api.Depot
-import Api.Product
+import Api.Auth
+-- import Api.User
+-- import Api.BlogPost
+-- import Api.Shelf
+-- import Api.Item
+-- import Api.Depot
+-- import Api.Product
 
 
-type API = "users"    :> UserAPI
-      :<|> "posts"    :> BlogPostAPI
-      :<|> "shelfs"   :> ShelfAPI
-      :<|> "items"    :> ItemAPI
-      :<|> "depots"   :> DepotAPI
-      :<|> "products" :> ProductAPI
+-- type API =
+      --      "users"    :> UserAPI
+      -- :<|> "posts"    :> BlogPostAPI
+      -- :<|> "shelfs"   :> ShelfAPI
+      -- :<|> "items"    :> ItemAPI
+      -- :<|> "depots"   :> DepotAPI
+      -- :<|> "products" :> ProductAPI
 
 
 startApp :: IO ()
 startApp = run 3000 $ myCors app
 
-readerTToExcept :: AppM :~> Handler
-readerTToExcept = Nat (\r -> do
-  con <- liftIO $ PGS.connect PGS.defaultConnectInfo
-                              { PGS.connectUser     = "blogtutorial"
-                              , PGS.connectPassword = "blogtutorial"
-                              , PGS.connectDatabase = "blogtutorial"
-                              }
-  runReaderT r con)
+-- readerTToExcept :: AppM :~> Handler
+-- readerTToExcept = Nat (\r -> do
+--   con <- liftIO $ PGS.connect PGS.defaultConnectInfo
+--                               { PGS.connectUser     = "blogtutorial"
+--                               , PGS.connectPassword = "blogtutorial"
+--                               , PGS.connectDatabase = "blogtutorial"
+--                               }
+--   runReaderT r con)
+
+-- app :: Application
+-- app = serve api $ enter readerTToExcept server
+
 
 app :: Application
-app = serve api $ enter readerTToExcept server
+-- app = enter readerTToExcept (serveWithContext basicAuthApi
+app = (serveWithContext basicAuthApi
+                        basicAuthServerContext
+                        basicAuthServer)
 
-api :: Proxy API
+api :: Proxy BasicAPI -- API
 api = Proxy
 
-server :: ServerT API AppM
-server = userServer
-    :<|> blogPostServer
-    :<|> shelfServer
-    :<|> itemServer
-    :<|> depotServer
-    :<|> productServer
+-- server :: ServerT API AppM
+-- server =
+    --      userServer
+    -- :<|> blogPostServer
+    -- :<|> shelfServer
+    -- :<|> itemServer
+    -- :<|> depotServer
+    -- :<|> productServer
