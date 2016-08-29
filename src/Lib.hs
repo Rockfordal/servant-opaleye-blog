@@ -41,9 +41,6 @@ readerTToExcept = Nat (\r -> do
                               }
   runReaderT r con)
 
-app :: Application
-app = serve api $ enter readerTToExcept server
-
 api :: Proxy API
 api = Proxy
 
@@ -54,3 +51,6 @@ server = userServer
     :<|> itemServer
     :<|> depotServer
     :<|> productServer
+
+app :: Application
+app = serve api $ enter readerTToExcept server
