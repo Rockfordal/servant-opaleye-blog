@@ -48,7 +48,7 @@ getPostsByEmail email = do
 postPost :: BlogPostWrite -> AppM Int64
 postPost post = do
   con <- ask
-  liftIO $ runInsert con blogPostTable $ blogPostToPG post
+  liftIO $ runInsert con blogPostTable (blogPostToPG post)
 
 deletePost :: BlogPostID -> AppM Int64
 deletePost idToMatch = do
