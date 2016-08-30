@@ -24,6 +24,7 @@ library
                      , Api.Item
                      , Api.Depot
                      , Api.Product
+                     , Api.Private
                      , Models.User
                      , Models.BlogPost
                      , Models.Shelf
@@ -55,6 +56,7 @@ library
                      , postgresql-simple
                      , transformers
                      , pwstore-fast
+                     , text
                      -- , postgresql-libpq
   default-language:    Haskell2010
 

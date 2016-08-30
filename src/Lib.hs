@@ -1,5 +1,15 @@
 {-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE TypeOperators   #-}
+
+{-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
+{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE UndecidableInstances  #-}
+
 module Lib
     ( startApp
     ) where
@@ -19,6 +29,9 @@ import Api.Shelf
 import Api.Item
 import Api.Depot
 import Api.Product
+import Api.Private
+import Data.Text (Text)
+--import Models.User
 
 
 type API = "users"    :> UserAPI
@@ -27,6 +40,8 @@ type API = "users"    :> UserAPI
       :<|> "items"    :> ItemAPI
       :<|> "depots"   :> DepotAPI
       :<|> "products" :> ProductAPI
+      :<|> "private"  :> PrivateAPI
+      -- :<|> "private" :> AuthProtect "cookie-auth" :> PrivateAPI
 
 
 startApp :: IO ()
@@ -51,6 +66,23 @@ server = userServer
     :<|> itemServer
     :<|> depotServer
     :<|> productServer
+    :<|> privateServer
+
+myServer :: Server API
+myServer = enter readerTToExcept server
+
+authCheck :: BasicAuthCheck User
+authCheck =
+  let check (BasicAuthData username password) = return $
+        if username == "servant" && password == "server"
+          then Authorized (User "servant")
+          else Unauthorized
+  in BasicAuthCheck check
+
+basicAuthServerContext :: Context (BasicAuthCheck User ': '[])
+basicAuthServerContext = authCheck :. EmptyContext
 
 app :: Application
-app = serve api $ enter readerTToExcept server
+-- app = serve api myServer
+-- app = serveWithContext api EmptyContext myServer
+app = serveWithContext api basicAuthServerContext myServer
