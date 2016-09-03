@@ -26,6 +26,9 @@ type ShelfLabel  = String
 type ProductName = String
 
 
+www :: FilePath
+www = "www"
+
 readerTToExcept :: AppM :~> Handler
 readerTToExcept = Nat (\r -> do
   con <- liftIO $ PGS.connect PGS.defaultConnectInfo

@@ -25,6 +25,7 @@ library
                      , Api.Depot
                      , Api.Product
                      , Api.Private
+                     , Api.Home
                      , Models.User
                      , Models.BlogPost
                      , Models.Shelf
