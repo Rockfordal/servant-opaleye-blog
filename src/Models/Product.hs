@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Models.Product where
 
 import Opaleye
@@ -10,6 +11,8 @@ import Data.Aeson
 import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
+import GHC.Generics
+import Data.Typeable
 
 data Product' a b c d =
   Product
@@ -17,7 +20,7 @@ data Product' a b c d =
     , prShelfId   :: b
     , prName      :: c
     , prTimestamp :: d
-    }
+    } deriving (Show, Generic, Typeable)
 
 type ProductRead  = Product' ProductID         ShelfID String DateTime
 type ProductWrite = Product' (Maybe ProductID) ShelfID String (Maybe DateTime)

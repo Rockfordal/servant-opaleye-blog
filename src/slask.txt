@@ -1,0 +1,47 @@
+
+-- instance ToSchema (Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)) where
+--   declareNamedSchema _ = yay
+
+-- instance ToSchema Coord where
+-- instance ToSchema (Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)) where
+  -- declareNamedSchema _ = pure (NamedSchema (Just "Value") (mempty & type_ .~ SwaggerObject))
+  -- declareNamedSchema = pure (Just (Shelf 1, yay, yay 10, testtid), schema)
+
+  -- declareNamedSchema = pure (Just "Hylla", schema)
+  --  where
+  --    schema = mempty
+  --      -- & schemaType .~ SwaggerObject
+  --      & schemaProperties .~
+  --          [ ("id",        toSchemaRef (Proxy :: Proxy Int))
+  --          , ("label",     toSchemaRef (Proxy :: Proxy String))
+  --          , ("position",  toSchemaRef (Proxy :: Proxy String))
+  --          , ("size",      toSchemaRef (Proxy :: Proxy Int))
+  --          , ("timestamp", toSchemaRef (Proxy :: Proxy DateTime))
+  --          ]
+  --      & schemaRequired .~ [ "id", "label", "position", "size", "timestamp" ]
+
+-- ToSchema (Shelf id label pos size dat) = "yep"
+
+
+-- instance ToSchema (Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)) where
+--   declareNamedSchema _ = (pure testshelf) --, schema
+
+  -- toSchema testshelf = "yep"
+-- toSchema (Shelf' 1 "label" "pos" 10 testtid) = "yep"
+
+-- testshelf :: Shelf' ShelfID String String Int DateTime
+-- testshelf = (Shelf tid ts ts tint tdate)
+
+-- tint :: Int
+-- tint = 10
+
+-- tid :: ShelfID
+-- tid = 1
+
+-- ts :: String
+-- ts = "yay"
+
+-- tdate :: DateTime
+-- tdate = fromSeconds 1234234234234
+
+ -- No instance for (ToSchema (Shelf' ShelfID String String Int DateTime))

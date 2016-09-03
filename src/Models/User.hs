@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Models.User where
 
 import Opaleye
@@ -11,6 +12,8 @@ import Data.Aeson
 import Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as BS
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
+import GHC.Generics
+import Data.Typeable
 
 import App
 
@@ -18,7 +21,7 @@ data User' a b =
   User
     { userEmail    :: a
     , userPassword :: b
-    }
+    } deriving (Show, Generic, Typeable)
 
 type UserRead   = User' Email ByteString
 type UserWrite  = User' Email String

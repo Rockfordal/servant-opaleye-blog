@@ -29,6 +29,8 @@ import Data.Text
 import Data.Word
 import Data.Swagger hiding (Header, Http)
 import Data.Proxy
+import Data.ByteString -- (ByteString)
+import GHC.Generics
 import Servant.API
 import Servant.JS (writeJSForAPI, vanillaJS)
 import Servant.Mock -- (mock)
@@ -45,11 +47,14 @@ import Api.Shelf
 import Models.Shelf
 import Models.Depot
 import Models.Item
-import App (ShelfID, DepotID,  ItemID)
+import Models.Product
+import Models.BlogPost
+import Models.User
+import App (ShelfID, DepotID, ItemID, ProductID, BlogPostID, Email)
 import Data.DateTime (DateTime, fromSeconds)
 import Data.Swagger.Schema
 import API
-
+-- import GHC.Generics.Generic (ByteString)
 
 -- js :: IO ()
 -- js = writeJSForAPI api vanillaJS (static </> "vanilla" </> "api.js")
@@ -110,7 +115,6 @@ swaggerDoc = toSwagger (Proxy :: Proxy API)
 type SwaggerSchemaEndpoint = "swagger.js" :> Get '[JSON] Swagger
 
 -- type instance IsElem' e API = IsElem e API'
-
 -- instance Arbitrary Swagger
 -- instance Arbitrary (SwaggerUiHtml SwaggerSchemaEndpoint API)
 
@@ -123,6 +127,24 @@ instance ToSchema (Depot' (Maybe DepotID) ShelfID ItemID Int (Maybe DateTime))
 
 instance ToSchema (Item' (Maybe ItemID) String String (Maybe DateTime))
 instance ToSchema (Item' ItemID String String DateTime)
+
+instance ToSchema (Product' (Maybe ProductID) ShelfID String (Maybe DateTime))
+instance ToSchema (Product' ProductID ShelfID String DateTime)
+
+instance ToSchema (BlogPost' (Maybe BlogPostID) String String Email (Maybe DateTime))
+instance ToSchema (BlogPost' BlogPostID String String Email DateTime)
+
+instance ToSchema (User' Email String)
+instance ToSchema (User' Email ByteString)
+
+instance ToSchema ByteString
+instance Generic ByteString
+
+ -- • No instance for (Data.Swagger.Internal.Schema.GToSchema (Rep ByteString))
+
+-- instance (Data.Swagger.Internal.Schema.GToSchema (Rep ByteString))
+-- instance ToSchema (Rep ByteString)
+
 
 
 --- Parametrar ---

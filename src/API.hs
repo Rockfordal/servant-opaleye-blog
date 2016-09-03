@@ -16,21 +16,21 @@ import Api.Home
 
 
 type API = "shelfs" :> ShelfAPI
-      -- :<|> "posts"    :> BlogPostAPI
+      :<|> "posts"    :> BlogPostAPI
       :<|> "items"    :> ItemAPI
       :<|> "depots"   :> DepotAPI
-      -- :<|> "products" :> ProductAPI
+      :<|> "products" :> ProductAPI
+      :<|> "home"     :> HomeAPI
+      :<|> "users"    :> UserAPI
       -- :<|> "private"  :> PrivateAPI
-      -- :<|> "home"     :> HomeAPI
-      -- :<|> "users"    :> UserAPI
 
 
 server :: ServerT API AppM
 server = shelfServer
---     :<|> blogPostServer
+    :<|> blogPostServer
     :<|> itemServer
     :<|> depotServer
---     :<|> productServer
---     :<|> privateServer
---     :<|> homeServer
---     :<|> userServer
+    :<|> productServer
+    :<|> homeServer
+    :<|> userServer
+    -- :<|> privateServer

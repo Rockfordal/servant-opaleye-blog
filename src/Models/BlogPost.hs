@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Models.BlogPost where
 
 import Opaleye
@@ -10,6 +11,8 @@ import Data.Aeson
 import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
+import GHC.Generics
+import Data.Typeable
 
 data BlogPost' a b c d e =
   BlogPost { bpId         :: a
@@ -17,7 +20,7 @@ data BlogPost' a b c d e =
            , bpBody       :: c
            , bpUsersEmail :: d
            , bpTimestamp  :: e
-           }
+           } deriving (Show, Generic, Typeable)
 
 type BlogPostRead  = BlogPost' BlogPostID String String Email DateTime
 type BlogPostWrite = BlogPost' (Maybe BlogPostID) String String Email (Maybe DateTime)
