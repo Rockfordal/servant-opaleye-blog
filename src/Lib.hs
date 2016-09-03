@@ -5,48 +5,28 @@ module Lib (startApp) where
 
 import Network.Wai
 import Network.Wai.Handler.Warp
+-- import Data.Swagger hiding (Header, Http)
 import Servant
+import Servant.Swagger
+import Servant.Swagger.UI
 import App (AppM, readerTToExcept, www)
 import Auth (basicAuthServerContext)
 import Ware
-import Api.User
-import Api.BlogPost
-import Api.Shelf
-import Api.Item
-import Api.Depot
-import Api.Product
-import Api.Private
-import Api.Home
 import Data.Text (Text)
-
-type MainAPI = API :<|> Raw
-
-type API = "users"    :> UserAPI
-      :<|> "posts"    :> BlogPostAPI
-      :<|> "shelfs"   :> ShelfAPI
-      :<|> "items"    :> ItemAPI
-      :<|> "depots"   :> DepotAPI
-      :<|> "products" :> ProductAPI
-      :<|> "private"  :> PrivateAPI
-      :<|> "home"     :> HomeAPI
-      -- :<|> IndexAPI
+import Docs
+import API
 
 
-server :: ServerT API AppM
-server = userServer
-    :<|> blogPostServer
-    :<|> shelfServer
-    :<|> itemServer
-    :<|> depotServer
-    :<|> productServer
-    :<|> privateServer
-    :<|> homeServer
-    -- :<|> fileServer
-    -- :<|> indexServer
+type MainAPI = API
+          :<|> SwaggerSchemaEndpoint
+          :<|> SwaggerSchemaUI "swagger-ui" "swagger.json"
+          :<|> Raw
 
 myServer :: Server MainAPI
--- myServer = enter readerTToExcept server
-myServer = enter readerTToExcept server :<|> serveDirectory www
+myServer = enter readerTToExcept server
+      :<|> return swaggerDoc
+      :<|> swaggerSchemaUIServer swaggerDoc
+      :<|> serveDirectory www
 
 api :: Proxy API
 api = Proxy
@@ -55,7 +35,6 @@ mainApi :: Proxy MainAPI
 mainApi = Proxy
 
 app :: Application
--- app = serveWithContext api basicAuthServerContext myServer
 app = serveWithContext mainApi basicAuthServerContext myServer
 
 startApp :: IO ()
