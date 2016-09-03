@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Models.Depot where
 
 import Opaleye
@@ -10,6 +11,8 @@ import Data.Aeson
 import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
+import GHC.Generics
+import Data.Typeable
 
 data Depot' a b c d e =
   Depot
@@ -18,7 +21,7 @@ data Depot' a b c d e =
     , dpItemId    :: c
     , dpQuantity  :: d
     , dpTimestamp :: e
-    }
+    } deriving (Show, Generic, Typeable)
 
 -- type ColumnNullableDepot = Depot' (Column (Nullable PGText))
 --                                   (Column (Nullable PGDate))

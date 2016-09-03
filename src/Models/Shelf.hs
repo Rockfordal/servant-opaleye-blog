@@ -2,6 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+
+{-# LANGUAGE DeriveGeneric #-}
 module Models.Shelf where
 
 import Opaleye
@@ -10,6 +12,9 @@ import Data.Aeson
 import Data.DateTime (DateTime)
 import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import App
+import GHC.Generics
+import Data.Typeable
+
 
 data Shelf' a b c d e =
   Shelf
@@ -18,7 +23,7 @@ data Shelf' a b c d e =
     , shPosition  :: c
     , shSize      :: d
     , shTimestamp :: e
-    }
+    } deriving (Show, Generic, Typeable)
 
 type ShelfRead  = Shelf' ShelfID         String String Int DateTime
 type ShelfWrite = Shelf' (Maybe ShelfID) String String Int (Maybe DateTime)
@@ -37,10 +42,10 @@ type ShelfColumnWrite = Shelf' (Maybe (Column PGInt8))
 
 
 instance ToJSON ShelfRead where
-  toJSON shelf = object [ "id"        .= shId shelf
-                        , "label"     .= shLabel shelf
-                        , "position"  .= shPosition shelf
-                        , "size"      .= shSize shelf
+  toJSON shelf = object [ "id"        .= shId        shelf
+                        , "label"     .= shLabel     shelf
+                        , "position"  .= shPosition  shelf
+                        , "size"      .= shSize      shelf
                         , "timestamp" .= shTimestamp shelf
                         ]
 
